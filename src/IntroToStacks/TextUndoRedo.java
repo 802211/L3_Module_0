@@ -4,6 +4,7 @@ import java.awt.Event;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.security.Key;
+import java.util.Stack;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -11,7 +12,7 @@ import javax.swing.JPanel;
 
 public class TextUndoRedo implements KeyListener {
 	/*
-	 * Create a JFrame with a JPanel and a JLabel.
+	 * Create a JFrame with a JPanel and a JLabel. √
 	 * 
 	 * Every time a key is pressed, add that character to the JLabel. It should
 	 * look like a basic text editor.
@@ -25,7 +26,8 @@ public class TextUndoRedo implements KeyListener {
 	 * JLabel.
 	 * 
 	 */
-	Stack <char> label = new Stack <char>();
+	Stack<Character> label = new Stack<Character>();
+
 	JFrame f;
 	JPanel p;
 	JLabel l;
@@ -35,7 +37,10 @@ public class TextUndoRedo implements KeyListener {
 		TUR.setup();
 
 	}
-	
+
+	char end;
+	String text;
+
 	void setup() {
 
 		f = new JFrame();
@@ -46,29 +51,51 @@ public class TextUndoRedo implements KeyListener {
 		f.setVisible(true);
 		f.setSize(500, 500);
 		f.addKeyListener(this);
+		l.setVisible(true);
+		l.setSize(100, 500);
+		text = l.getText();
+		l.setText(text);
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-			
-		if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE){
-			
+
+		if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+			if(text.length() > 0){
+			end = text.charAt(text.length() - 1);
+			text = text.substring(0, text.length() - 1);
+			l.setText(text);
+			label.push(end);
+			}
 		}
+
+		else if (e.getKeyCode() == KeyEvent.VK_UP) {
+			if (label.size() > 0) {
+				char pop = label.pop();
+				text = text + pop;
+				l.setText(text);
+
+			}
+		}
+
+		else {
+			text = text + e.getKeyChar();
+			l.setText(text);
+		}
+		p.repaint();
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
 
 }
